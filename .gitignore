@@ -1,0 +1,7 @@
+# Fotos originales descargadas del sitio anterior (no se usan en la web)
+originales/
+
+# Configuración local de Claude
+.claude/
+
+.DS_Store
