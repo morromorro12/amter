@@ -213,11 +213,40 @@
     </div>
 
     <div class="intro__media">
-      <figure class="intro__img intro__img--main reveal">
-        <img src="assets/img/sm/piscina-dia.jpg" srcset="assets/img/sm/piscina-dia.jpg 720w, assets/img/piscina-dia.jpg 960w" sizes="(max-width: 900px) 70vw, 34vw" alt="Piscina al aire libre bajo cielo azul, rodeada de pinos" loading="lazy">
+      <!-- Las fotos de cada <template> se van mostrando de a una (ver main.js) -->
+      <figure class="intro__img intro__img--main reveal" data-slideshow>
+        <img class="is-active" src="assets/img/sm/piscina-dia.jpg" srcset="assets/img/sm/piscina-dia.jpg 600w, assets/img/piscina-dia.jpg 960w" sizes="(max-width: 900px) 70vw, 34vw" alt="Piscina al aire libre bajo cielo azul, rodeada de pinos" loading="lazy">
+        <template>
+          <img src="assets/img/sm/eventos-01.jpg" srcset="assets/img/sm/eventos-01.jpg 720w, assets/img/eventos-01.jpg 1280w" alt="Salón de eventos vidriado de noche, con guirnaldas de luces y fuente">
+          <img src="assets/img/sm/jardin-01.jpg" srcset="assets/img/sm/jardin-01.jpg 720w, assets/img/jardin-01.jpg 1280w" alt="Bancos de hierro y madera sobre el césped, con fuente al fondo">
+          <img src="assets/img/sm/piscina-03.jpg" srcset="assets/img/sm/piscina-03.jpg 720w, assets/img/piscina-03.jpg 1280w" alt="Piscina con fuente y salón vidriado detrás">
+          <img src="assets/img/sm/eventos-05.jpg" srcset="assets/img/sm/eventos-05.jpg 720w, assets/img/eventos-05.jpg 1280w" alt="Pasillo de arcos con luces cálidas en el jardín">
+          <img src="assets/img/sm/piscina-04.jpg" srcset="assets/img/sm/piscina-04.jpg 720w, assets/img/piscina-04.jpg 1280w" alt="Salpicadura de agua en la piscina con reposeras al fondo">
+          <img src="assets/img/sm/triple-4.jpg" srcset="assets/img/sm/triple-4.jpg 720w, assets/img/triple-4.jpg 1280w" alt="Cama matrimonial con respaldo de madera y toallas">
+          <img src="assets/img/sm/eventos-03.jpg" srcset="assets/img/sm/eventos-03.jpg 720w, assets/img/eventos-03.jpg 1280w" alt="Piscina iluminada frente al salón de eventos">
+          <img src="assets/img/sm/eventos-06.jpg" srcset="assets/img/sm/eventos-06.jpg 720w, assets/img/eventos-06.jpg 1280w" alt="Salón de eventos con luces violetas entre árboles">
+          <img src="assets/img/sm/cuadruple-2.jpg" srcset="assets/img/sm/cuadruple-2.jpg 720w, assets/img/cuadruple-2.jpg 1280w" alt="Habitación cuádruple con cama matrimonial, dos camas single, TV y aire acondicionado">
+          <img src="assets/img/sm/piscina-noche-07.jpg" srcset="assets/img/sm/piscina-noche-07.jpg 720w, assets/img/piscina-noche-07.jpg 1280w" alt="Castillo inflable junto a la piscina iluminada">
+          <img src="assets/img/sm/triple-2.jpg" srcset="assets/img/sm/triple-2.jpg 720w, assets/img/triple-2.jpg 1280w" alt="Cama con vista a la ventana y al jardín">
+          <img src="assets/img/sm/eventos-04.jpg" srcset="assets/img/sm/eventos-04.jpg 720w, assets/img/eventos-04.jpg 1280w" alt="Guirnaldas de luces sobre el salón y la piscina">
+        </template>
       </figure>
-      <figure class="intro__img intro__img--second reveal">
-        <img src="assets/img/sm/jardin-02.jpg" srcset="assets/img/sm/jardin-02.jpg 720w, assets/img/jardin-02.jpg 1280w" sizes="(max-width: 900px) 45vw, 20vw" alt="Jardín con césped, agapantos y reposeras" loading="lazy">
+      <figure class="intro__img intro__img--second reveal" data-slideshow>
+        <img class="is-active" src="assets/img/sm/jardin-02.jpg" srcset="assets/img/sm/jardin-02.jpg 720w, assets/img/jardin-02.jpg 1280w" sizes="(max-width: 900px) 45vw, 20vw" alt="Jardín con césped, agapantos y reposeras" loading="lazy">
+        <template>
+          <img src="assets/img/sm/triple-1.jpg" alt="Habitación triple con cama matrimonial, cama single y ventanales">
+          <img src="assets/img/sm/parrilla.jpg" alt="Cortes de carne a la parrilla sobre brasas y leña">
+          <img src="assets/img/sm/cuadruple-1.jpg" alt="Habitación cuádruple con puerta de madera abierta hacia el jardín">
+          <img src="assets/img/sm/entrada-cartel.jpg" alt="Letras de AMTER en la entrada, entre árboles y cielo azul" style="object-position:8% 50%">
+          <img src="assets/img/sm/eventos-00.jpg" alt="Cartel iluminado de AMTER en la entrada">
+          <img src="assets/img/sm/piscina-noche-06.jpg" alt="Piscina azul iluminada bajo guirnaldas">
+          <img src="assets/img/sm/hab-bano.jpg" alt="Baño privado con ducha">
+          <img src="assets/img/sm/triple-3.jpg" alt="Habitación luminosa con dos ventanas, TV y aire acondicionado">
+          <img src="assets/img/sm/piscina-noche-05.jpg" alt="Piscina iluminada en azul con guirnaldas de luces">
+          <img src="assets/img/sm/cuadruple-3.jpg" alt="Dos camas single, mesa de luz y frigobar">
+          <img src="assets/img/sm/eventos-02.jpg" alt="Salón de fiestas iluminado entre pinos">
+          <img src="assets/img/sm/triple-5.jpg" alt="Cama single junto a la ventana, con TV">
+        </template>
       </figure>
       <div class="intro__badge reveal">
         <svg class="icon"><use href="#i-bridge"/></svg>

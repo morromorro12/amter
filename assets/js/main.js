@@ -99,6 +99,73 @@
   });
   restart();
 
+  /* ---------- Fotos de la intro: van pasando en el marco grande y en el chico ---------- */
+  var introMedia = $('.intro__media');
+  var frames = $$('[data-slideshow]').map(function (fig) {
+    var first = $('img', fig);
+    var tpl = $('template', fig);
+    return {
+      el: fig,
+      current: first,
+      sizes: first.getAttribute('sizes'),
+      items: [first].concat(tpl ? $$('img', tpl.content) : []),
+      index: 0,
+      next: null,
+      ready: null,
+      busy: false
+    };
+  });
+
+  // Crea (y empieza a descargar) la próxima foto de cada marco
+  function prepareFrame(frame) {
+    var model = frame.items[(frame.index + 1) % frame.items.length];
+    var img = new Image();
+    if (model.getAttribute('srcset')) {
+      img.sizes = frame.sizes;
+      img.srcset = model.getAttribute('srcset');
+    }
+    img.src = model.getAttribute('src');
+    img.alt = model.getAttribute('alt');
+    if (model.getAttribute('style')) img.setAttribute('style', model.getAttribute('style'));
+    frame.next = img;
+    frame.ready = img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+  }
+
+  function advanceFrame(frame) {
+    if (frame.busy || frame.items.length < 2) return;
+    frame.busy = true;
+    frame.ready.then(function () {
+      var img = frame.next;
+      var old = frame.current;
+      frame.el.appendChild(img);
+      void img.offsetWidth;
+      img.classList.add('is-active');
+      frame.current = img;
+      setTimeout(function () { old.remove(); }, 1400);
+      frame.index = (frame.index + 1) % frame.items.length;
+      prepareFrame(frame);
+      frame.busy = false;
+    });
+  }
+
+  if (introMedia && frames.length && !reduceMotion && 'IntersectionObserver' in window) {
+    var introTimer;
+    var introPaused = false;
+    var introTick = function () {
+      if (introPaused || document.hidden) return;
+      // el marco chico cambia un instante después del grande
+      frames.forEach(function (frame, i) { setTimeout(function () { advanceFrame(frame); }, i * 900); });
+    };
+    new IntersectionObserver(function (entries) {
+      clearInterval(introTimer);
+      if (!entries[entries.length - 1].isIntersecting) return;
+      frames.forEach(function (frame) { if (!frame.next) prepareFrame(frame); });
+      introTimer = setInterval(introTick, 5000);
+    }, { rootMargin: '150px 0px' }).observe(introMedia);
+    introMedia.addEventListener('mouseenter', function () { introPaused = true; });
+    introMedia.addEventListener('mouseleave', function () { introPaused = false; });
+  }
+
   /* ---------- Formulario de reserva ---------- */
   var form = $('#bookingForm');
   var inDate = $('#bk-in');
@@ -388,6 +455,11 @@
         var siblings = $$('.reveal', el.parentElement).filter(function (s) { return s.parentElement === el.parentElement; });
         var delay = Math.min(siblings.indexOf(el), 6) * 70;
         el.style.transitionDelay = delay + 'ms';
+        // sin el retraso, los efectos hover posteriores responden al instante
+        el.addEventListener('transitionend', function clearDelay() {
+          el.style.transitionDelay = '';
+          el.removeEventListener('transitionend', clearDelay);
+        });
         el.classList.add('is-visible');
         io.unobserve(el);
       });
