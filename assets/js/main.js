@@ -59,46 +59,6 @@
     });
   }
 
-  /* ---------- Hero ---------- */
-  var slides = $$('.hero__slide');
-  var dotsWrap = $('.hero__dots');
-  var current = 0;
-  var timer;
-
-  function showSlide(i) {
-    slides[current].classList.remove('is-active');
-    dots[current].classList.remove('is-active');
-    dots[current].setAttribute('aria-selected', 'false');
-    current = (i + slides.length) % slides.length;
-    var img = $('img', slides[current]);
-    if (img.loading === 'lazy') img.loading = 'eager';
-    slides[current].classList.add('is-active');
-    dots[current].classList.add('is-active');
-    dots[current].setAttribute('aria-selected', 'true');
-  }
-
-  var dots = slides.map(function (slide, i) {
-    var b = document.createElement('button');
-    b.className = 'hero__dot' + (i === 0 ? ' is-active' : '');
-    b.type = 'button';
-    b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-    b.textContent = slide.dataset.label;
-    b.addEventListener('click', function () { showSlide(i); restart(); });
-    dotsWrap.appendChild(b);
-    return b;
-  });
-
-  function restart() {
-    clearInterval(timer);
-    if (!reduceMotion) timer = setInterval(function () { showSlide(current + 1); }, 6500);
-  }
-  // Precargar las siguientes fotos sin bloquear la primera
-  window.addEventListener('load', function () {
-    slides.forEach(function (s) { var img = $('img', s); if (img.loading === 'lazy') img.loading = 'eager'; });
-  });
-  restart();
-
   /* ---------- Fotos de la intro: van pasando en el marco grande y en el chico ---------- */
   var introMedia = $('.intro__media');
   var frames = $$('[data-slideshow]').map(function (fig) {
@@ -110,15 +70,13 @@
       sizes: first.getAttribute('sizes'),
       items: [first].concat(tpl ? $$('img', tpl.content) : []),
       index: 0,
-      next: null,
-      ready: null,
-      busy: false
+      pending: null
     };
   });
 
-  // Crea (y empieza a descargar) la próxima foto de cada marco
-  function prepareFrame(frame) {
-    var model = frame.items[(frame.index + 1) % frame.items.length];
+  // Crea la foto i de un marco y empieza a descargarla
+  function loadFrame(frame, i) {
+    var model = frame.items[i];
     var img = new Image();
     if (model.getAttribute('srcset')) {
       img.sizes = frame.sizes;
@@ -127,43 +85,62 @@
     img.src = model.getAttribute('src');
     img.alt = model.getAttribute('alt');
     if (model.getAttribute('style')) img.setAttribute('style', model.getAttribute('style'));
-    frame.next = img;
-    frame.ready = img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+    return { index: i, img: img, ready: img.decode ? img.decode().catch(function () {}) : Promise.resolve() };
   }
 
-  function advanceFrame(frame) {
-    if (frame.busy || frame.items.length < 2) return;
-    frame.busy = true;
-    frame.ready.then(function () {
-      var img = frame.next;
+  function preloadFrame(frame) {
+    if (frame.items.length > 1) frame.pending = loadFrame(frame, (frame.index + 1) % frame.items.length);
+  }
+
+  // dir: 1 = siguiente, -1 = anterior
+  function showFrame(frame, dir) {
+    var total = frame.items.length;
+    if (total < 2) return;
+    var i = (frame.index + dir + total) % total;
+    var next = frame.pending && frame.pending.index === i ? frame.pending : loadFrame(frame, i);
+    frame.index = i;
+    frame.pending = null;
+    next.ready.then(function () {
+      if (frame.index !== i) return; // ya se pidió otra foto
       var old = frame.current;
-      frame.el.appendChild(img);
-      void img.offsetWidth;
-      img.classList.add('is-active');
-      frame.current = img;
-      setTimeout(function () { old.remove(); }, 1400);
-      frame.index = (frame.index + 1) % frame.items.length;
-      prepareFrame(frame);
-      frame.busy = false;
+      frame.el.appendChild(next.img);
+      void next.img.offsetWidth;
+      next.img.classList.add('is-active');
+      frame.current = next.img;
+      setTimeout(function () { old.remove(); }, 1200);
+      preloadFrame(frame);
     });
   }
 
-  if (introMedia && frames.length && !reduceMotion && 'IntersectionObserver' in window) {
+  if (introMedia && frames.length) {
     var introTimer;
-    var introPaused = false;
-    var introTick = function () {
-      if (introPaused || document.hidden) return;
-      // el marco chico cambia un instante después del grande
-      frames.forEach(function (frame, i) { setTimeout(function () { advanceFrame(frame); }, i * 900); });
+    var introVisible = false;
+    var moveIntro = function (dir, stagger) {
+      frames.forEach(function (frame, i) { setTimeout(function () { showFrame(frame, dir); }, i * stagger); });
     };
-    new IntersectionObserver(function (entries) {
+    var startIntro = function () {
       clearInterval(introTimer);
-      if (!entries[entries.length - 1].isIntersecting) return;
-      frames.forEach(function (frame) { if (!frame.next) prepareFrame(frame); });
-      introTimer = setInterval(introTick, 5000);
-    }, { rootMargin: '150px 0px' }).observe(introMedia);
-    introMedia.addEventListener('mouseenter', function () { introPaused = true; });
-    introMedia.addEventListener('mouseleave', function () { introPaused = false; });
+      if (reduceMotion || !introVisible) return;
+      introTimer = setInterval(function () {
+        // el marco chico cambia un instante después del grande
+        if (!document.hidden) moveIntro(1, 600);
+      }, 3500);
+    };
+
+    $$('[data-intro-dir]', introMedia).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        moveIntro(Number(btn.dataset.introDir), 120);
+        startIntro();
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        introVisible = entries[entries.length - 1].isIntersecting;
+        if (introVisible) frames.forEach(function (frame) { if (!frame.pending) preloadFrame(frame); });
+        startIntro();
+      }, { rootMargin: '150px 0px' }).observe(introMedia);
+    }
   }
 
   /* ---------- Formulario de reserva ---------- */

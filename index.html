@@ -138,14 +138,8 @@
 <!-- ============ HERO ============ -->
 <section class="hero" id="inicio" aria-label="Bienvenida">
   <div class="hero__slides">
-    <div class="hero__slide is-active" data-label="Jardines">
+    <div class="hero__slide is-active">
       <img src="assets/img/jardin-parque.jpg" alt="Jardines de AMTER con reposeras, palmeras y vegetación" fetchpriority="high">
-    </div>
-    <div class="hero__slide" data-label="Piscina">
-      <img src="assets/img/piscina-03.jpg" alt="Piscina de AMTER con fuente y pérgola, rodeada de pinos" loading="lazy" style="object-position:50% 62%">
-    </div>
-    <div class="hero__slide" data-label="Bienvenida">
-      <img src="assets/img/entrada-cartel.jpg" alt="Letras de AMTER en la entrada, entre árboles y cielo azul" loading="lazy" style="object-position:50% 70%">
     </div>
   </div>
 
@@ -158,8 +152,6 @@
       <a href="#eventos" class="btn btn--ghost-light">AMTER Eventos</a>
     </div>
   </div>
-
-  <div class="hero__dots" role="tablist" aria-label="Fotos de portada"></div>
 </section>
 
 <!-- ============ RESERVA ============ -->
@@ -248,6 +240,10 @@
           <img src="assets/img/sm/triple-5.jpg" alt="Cama single junto a la ventana, con TV">
         </template>
       </figure>
+      <div class="intro__nav">
+        <button type="button" class="intro__btn" data-intro-dir="-1" aria-label="Foto anterior"><svg class="icon"><use href="#i-left"/></svg></button>
+        <button type="button" class="intro__btn" data-intro-dir="1" aria-label="Foto siguiente"><svg class="icon"><use href="#i-right"/></svg></button>
+      </div>
       <div class="intro__badge reveal">
         <svg class="icon"><use href="#i-bridge"/></svg>
         <span>Junto al Puente Internacional<br><strong>San Martín</strong></span>
