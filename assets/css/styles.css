@@ -197,8 +197,18 @@ p { margin: 0 0 1.1em; }
 .nav__mobile-extra { display: none; }
 
 .header__actions { display: flex; align-items: center; gap: 18px; }
-.header__phone { display: inline-flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 600; }
-.header__phone .icon { width: 1.05em; height: 1.05em; }
+.header__wa {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 32px; padding: 0 12px 0 9px; border-radius: 999px;
+  font-size: 0.76rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.header__wa:hover { background: rgba(255, 255, 255, 0.18); border-color: #fff; }
+.header__wa .icon { width: 15px; height: 15px; color: #25d366; }
+.is-scrolled .header__wa { border-color: var(--linea); background: transparent; }
+.is-scrolled .header__wa:hover { border-color: #25d366; }
 .is-scrolled .header__cta { background: var(--verde-700); color: #fff; }
 .is-scrolled .header__cta:hover { background: var(--verde-800); }
 
@@ -681,7 +691,6 @@ dialog { padding: 0; border: 0; }
    Responsive
    ========================================================= */
 @media (max-width: 1180px) {
-  .header__phone span { display: none; }
   .booking__card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .field { border-bottom: 1px solid var(--linea); }
   .field:nth-child(2n) { border-right: 0; }
@@ -693,7 +702,7 @@ dialog { padding: 0; border: 0; }
   :root { --header-h: 74px; }
   .burger { display: block; z-index: 2; }
   .header__cta { display: none; }
-  .header__phone { display: none; }
+  .header__wa { display: none; }
 
   .nav {
     position: fixed; inset: 0; z-index: 1;
