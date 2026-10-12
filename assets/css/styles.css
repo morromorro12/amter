@@ -323,16 +323,18 @@ p { margin: 0 0 1.1em; }
 
 /* ---------- Cafetería museo ---------- */
 .museum { background: var(--crema-2); }
-.museum__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(40px, 7vw, 110px); align-items: center; }
-.museum__media { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 16px; align-items: end; }
+.museum__media { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .museum__img {
-  position: relative; display: block; aspect-ratio: 3 / 4;
+  position: relative; display: block; aspect-ratio: 4 / 3;
   border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: var(--verde-900);
 }
-.museum__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.museum__img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; transition: transform 1.2s var(--ease); }
 .museum__img:hover img { transform: scale(1.04); }
-.museum__img--sign { aspect-ratio: 4 / 5; margin-bottom: clamp(36px, 6vw, 80px); }
+.museum__text { max-width: 620px; margin: clamp(40px, 5vw, 64px) auto 0; text-align: center; }
+.museum__text p:not(.eyebrow) { color: var(--texto); font-size: 1.1rem; }
+.museum__text .chips { justify-content: center; }
 .museum .eyebrow { color: var(--corten); }
+.museum .eyebrow::after { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
 .museum .h2 em { color: var(--corten); }
 .museum .chips .icon { color: var(--corten); }
 
@@ -720,12 +722,10 @@ dialog { padding: 0; border: 0; }
   .nav__phone { display: inline-flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, 0.8); }
 
   .intro__grid,
-  .museum__grid,
   .food__grid,
   .location__grid,
   .events__top { grid-template-columns: 1fr; }
-  .intro__media,
-  .museum__media { max-width: 560px; }
+  .intro__media { max-width: 560px; }
   .features { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .section-head--split { grid-template-columns: 1fr; gap: 0; }
   .section-head--split .h2 { margin-bottom: 24px; }
@@ -756,7 +756,8 @@ dialog { padding: 0; border: 0; }
 
   .feature { padding: 14px 4px; gap: 6px; font-size: 0.76rem; }
   .feature .icon { width: 20px; height: 20px; }
-  .museum__media { gap: 12px; }
+  .museum__media { grid-template-columns: 1fr; gap: 12px; }
+  .museum__text p:not(.eyebrow) { font-size: 1rem; }
 
   .carousel__slide { flex-basis: 84%; }
   .carousel__btn { display: none; }
