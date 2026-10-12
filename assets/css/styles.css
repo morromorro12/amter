@@ -726,7 +726,7 @@ dialog { padding: 0; border: 0; }
   .menu-open .nav__list li:nth-child(4) { transition-delay: 0.15s; }
   .menu-open .nav__list li:nth-child(5) { transition-delay: 0.2s; }
   .nav__mobile-extra { display: grid; gap: 14px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.15); }
-  .nav__phone { display: inline-flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, 0.8); }
+  .nav__extra { display: inline-flex; align-items: center; gap: 12px; color: rgba(255, 255, 255, 0.8); }
 
   .intro__grid,
   .museum__grid,
