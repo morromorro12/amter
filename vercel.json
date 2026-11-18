@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/visitas", "destination": "/visitas/index.html" }
+  ]
+}

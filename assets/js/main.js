@@ -448,4 +448,22 @@
 
   /* ---------- Año ---------- */
   $('#year').textContent = new Date().getFullYear();
+
+  /* ---------- Contador de visitas (se ve en /visitas) ---------- */
+  // Cuenta una vez por día en cada celular o compu. Si falla, la página sigue igual.
+  (function () {
+    if (/\.vercel\.app$/.test(location.hostname)) return; // vistas previas de Vercel
+    var d = new Date();
+    var hoy = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    try {
+      if (localStorage.getItem('amter_no_contar') === '1') return;
+      if (localStorage.getItem('amter_visita') === hoy) return;
+      localStorage.setItem('amter_visita', hoy);
+    } catch (e) { /* modo privado: cuenta igual */ }
+    try {
+      if (!(navigator.sendBeacon && navigator.sendBeacon('/api/visita'))) {
+        fetch('/api/visita', { method: 'POST', keepalive: true }).catch(function () {});
+      }
+    } catch (e) {}
+  })();
 })();

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visitas · AMTER</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1b2c22">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --verde-950: #142019;
+      --verde-900: #1b2c22;
+      --verde-800: #233a2c;
+      --salvia-100: #e4eadf;
+      --crema: #f7f3ea;
+      --crema-2: #efe8da;
+      --oro: #c79b5b;
+      --oro-claro: #e6c995;
+      --tinta: #18201b;
+      --texto: #3c4640;
+      --suave: #6a736d;
+      --linea: rgba(24, 32, 27, 0.12);
+      --grilla: rgba(24, 32, 27, 0.08);
+      --blanco: #fff;
+      --barra: #357d4c;
+      --barra-activa: #1f5a35;
+      --error: #9a4a24;
+
+      --f-display: "Fraunces", Georgia, "Times New Roman", serif;
+      --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow-sm: 0 10px 30px -18px rgba(20, 32, 25, 0.35);
+      --gutter: clamp(16px, 4vw, 40px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--f-body);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--texto);
+      background: var(--crema);
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    h1, h2 { margin: 0; color: var(--tinta); font-weight: 400; }
+    p { margin: 0; }
+    :focus-visible { outline: 2px solid var(--oro); outline-offset: 3px; border-radius: 4px; }
+    .wrap { width: 100%; max-width: calc(1000px + var(--gutter) * 2); margin: 0 auto; padding: 0 var(--gutter); }
+    .num { font-variant-numeric: tabular-nums; }
+
+    /* Barra superior */
+    .top { background: var(--verde-900); color: #fff; }
+    .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+    .top img { width: 112px; }
+    .top a.volver {
+      font-size: .875rem; font-weight: 600; text-decoration: none; color: var(--oro-claro);
+      padding: 8px 0;
+    }
+    .top a.volver:hover { color: #fff; }
+
+    /* Encabezado */
+    .head { padding: clamp(28px, 5vw, 48px) 0 clamp(20px, 3vw, 28px); display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+    .head h1 { font-family: var(--f-display); font-size: clamp(2rem, 6vw, 2.75rem); line-height: 1.1; letter-spacing: -0.01em; }
+    .estado { display: flex; align-items: center; gap: 12px; color: var(--suave); font-size: .875rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font: inherit; font-weight: 600; font-size: .875rem; color: var(--verde-800);
+      background: var(--blanco); border: 1px solid var(--linea); border-radius: 999px;
+      padding: 7px 14px; cursor: pointer;
+    }
+    .btn:hover { border-color: var(--verde-800); }
+    .btn svg { width: 16px; height: 16px; }
+    .btn.girando svg { animation: girar .8s linear infinite; }
+    @keyframes girar { to { transform: rotate(360deg); } }
+
+    /* Tarjetas de números */
+    .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    @media (min-width: 760px) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } }
+    .tile {
+      background: var(--blanco); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+      padding: 18px 18px 16px; min-width: 0;
+    }
+    .tile.destacada { background: var(--verde-900); color: var(--salvia-100); }
+    .tile h2 { font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--suave); }
+    .tile.destacada h2 { color: var(--oro-claro); }
+    .tile .valor { font-family: var(--f-display); font-size: clamp(2.25rem, 8vw, 3rem); line-height: 1.1; color: var(--tinta); margin: 6px 0 4px; }
+    .tile.destacada .valor { color: #fff; }
+    .tile .nota { font-size: .8125rem; color: var(--suave); }
+    .tile.destacada .nota { color: var(--salvia-100); opacity: .8; }
+
+    /* Gráfica */
+    .card { background: var(--blanco); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: clamp(18px, 3vw, 28px); margin-top: 16px; }
+    .card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 16px; }
+    .card h2 { font-family: var(--f-display); font-size: 1.375rem; }
+    .card-head p { font-size: .875rem; color: var(--suave); }
+    .grafica { position: relative; height: 240px; touch-action: pan-y; }
+    .grafica svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .grafica .eje { font-family: var(--f-body); font-size: 11px; fill: var(--suave); }
+    .grafica .barra { fill: var(--barra); }
+    .grafica .barra.activa { fill: var(--barra-activa); }
+    .grafica .guia { stroke: var(--grilla); stroke-width: 1; }
+    .grafica .base { stroke: rgba(24, 32, 27, 0.25); stroke-width: 1; }
+    .grafica .foco { fill: rgba(53, 125, 76, 0.08); }
+    .tooltip {
+      position: absolute; top: 0; left: 0; pointer-events: none; z-index: 2;
+      background: var(--verde-950); color: #fff; border-radius: 10px;
+      padding: 7px 11px; font-size: .8125rem; line-height: 1.35; white-space: nowrap;
+      box-shadow: 0 8px 24px -10px rgba(0,0,0,.5);
+      opacity: 0; transition: opacity .12s;
+    }
+    .tooltip.visible { opacity: 1; }
+    .tooltip strong { display: block; font-size: 1rem; font-weight: 700; }
+    .tooltip span { color: var(--salvia-100); opacity: .85; }
+
+    details { margin-top: 18px; border-top: 1px solid var(--linea); padding-top: 14px; }
+    summary { cursor: pointer; font-weight: 600; font-size: .9375rem; color: var(--verde-800); }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .9375rem; }
+    th, td { text-align: left; padding: 7px 4px; border-bottom: 1px solid var(--linea); }
+    th { font-size: .75rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--suave); }
+    td:last-child, th:last-child { text-align: right; }
+    tr.hoy td { font-weight: 700; color: var(--tinta); }
+
+    /* Cómo se cuenta */
+    .info { display: grid; gap: 16px; margin-top: 16px; }
+    @media (min-width: 760px) { .info { grid-template-columns: 1fr 1fr; } }
+    .info .card { margin-top: 0; }
+    .info h2 { font-size: 1.125rem; margin-bottom: 10px; }
+    .info ul { margin: 0; padding-left: 1.1em; font-size: .9375rem; }
+    .info li + li { margin-top: 6px; }
+
+    .switch { display: flex; align-items: flex-start; gap: 14px; cursor: pointer; }
+    .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .switch .riel {
+      flex: none; width: 46px; height: 28px; border-radius: 999px; background: #cfd5cc;
+      position: relative; transition: background .2s; margin-top: 2px;
+    }
+    .switch .riel::after {
+      content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%;
+      background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s;
+    }
+    .switch input:checked + .riel { background: var(--barra); }
+    .switch input:checked + .riel::after { transform: translateX(18px); }
+    .switch input:focus-visible + .riel { outline: 2px solid var(--oro); outline-offset: 3px; }
+    .switch strong { display: block; color: var(--tinta); font-size: .9375rem; }
+    .switch small { display: block; color: var(--suave); font-size: .8125rem; margin-top: 2px; }
+
+    /* Avisos */
+    .aviso { background: var(--blanco); border-left: 4px solid var(--error); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 16px; font-size: .9375rem; }
+    .aviso strong { color: var(--tinta); }
+    [hidden] { display: none !important; }
+    .cargando .valor, .cargando .grafica { opacity: .35; }
+
+    footer { padding: 32px 0 40px; font-size: .8125rem; color: var(--suave); text-align: center; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn.girando svg { animation: none; }
+      .tooltip, .switch .riel, .switch .riel::after { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <img src="/assets/img/logo-amter-blanco.png" alt="AMTER apart hotel" width="763" height="317">
+    <a class="volver" href="/">Ir a la página →</a>
+  </div>
+</div>
+
+<main class="wrap cargando" id="panel">
+  <div class="head">
+    <h1>Visitas de la página</h1>
+    <div class="estado">
+      <span id="actualizado" aria-live="polite">Cargando…</span>
+      <button class="btn" id="recargar" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <div class="aviso" id="aviso" role="alert" hidden></div>
+
+  <section class="tiles" aria-label="Resumen">
+    <div class="tile destacada">
+      <h2>Hoy</h2>
+      <p class="valor num" id="v-hoy">–</p>
+      <p class="nota" id="n-hoy">&nbsp;</p>
+    </div>
+    <div class="tile">
+      <h2>Últimos 7 días</h2>
+      <p class="valor num" id="v-semana">–</p>
+      <p class="nota">contando hoy</p>
+    </div>
+    <div class="tile">
+      <h2 id="t-mes">Este mes</h2>
+      <p class="valor num" id="v-mes">–</p>
+      <p class="nota" id="n-mes">&nbsp;</p>
+    </div>
+    <div class="tile">
+      <h2>Total</h2>
+      <p class="valor num" id="v-total">–</p>
+      <p class="nota" id="n-total">&nbsp;</p>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="t-grafica">
+    <div class="card-head">
+      <h2 id="t-grafica">Visitas por día</h2>
+      <p>Últimos 30 días · tocá una barra para ver el número</p>
+    </div>
+    <div class="grafica" id="grafica" role="img" aria-label="Gráfica de visitas por día de los últimos 30 días">
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <details>
+      <summary>Ver los números día por día</summary>
+      <table>
+        <thead><tr><th scope="col">Día</th><th scope="col">Visitas</th></tr></thead>
+        <tbody id="tabla"></tbody>
+      </table>
+    </details>
+  </section>
+
+  <div class="info">
+    <section class="card">
+      <h2>¿Cómo se cuenta?</h2>
+      <ul>
+        <li>Cada persona cuenta <strong>una vez por día</strong>, aunque entre varias veces o recargue la página.</li>
+        <li>Si vuelve otro día, cuenta de nuevo.</li>
+        <li>No se cuentan los robots de Google y otros buscadores.</li>
+        <li>Los días cambian a la medianoche de Uruguay.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>Tus propias visitas</h2>
+      <label class="switch">
+        <input type="checkbox" id="no-contar">
+        <span class="riel" aria-hidden="true"></span>
+        <span>
+          <strong>No contar las visitas de este dispositivo</strong>
+          <small id="no-contar-texto">Activalo en tu celular y en la compu del hotel para que tus propias entradas no se sumen. Hay que hacerlo en cada dispositivo.</small>
+        </span>
+      </label>
+    </section>
+  </div>
+</main>
+
+<footer>Esta página no aparece en el menú ni en Google. Solo entra quien tenga el link.</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = new Intl.NumberFormat('es-UY');
+  var datos = null;
+  var activo = -1;
+
+  function fecha(iso, opciones) {
+    var p = iso.split('-').map(Number);
+    return new Date(Date.UTC(p[0], p[1] - 1, p[2])).toLocaleDateString('es-UY', Object.assign({ timeZone: 'UTC' }, opciones));
+  }
+  function plural(n, uno, varios) { return fmt.format(n) + ' ' + (n === 1 ? uno : varios); }
+
+  /* ---------- Cargar ---------- */
+  var enCurso = false;
+  function cargar() {
+    if (enCurso) return;
+    enCurso = true;
+    var boton = $('recargar');
+    boton.classList.add('girando');
+    boton.disabled = true;
+    fetch('/api/visitas', { cache: 'no-store' })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          if (!r.ok) { var e = new Error(j.error || 'error'); e.code = j.error || r.status; throw e; }
+          return j;
+        });
+      })
+      .then(function (j) {
+        datos = j;
+        $('aviso').hidden = true;
+        pintar();
+        var h = new Date().toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit', hour12: false });
+        $('actualizado').textContent = 'Actualizado a las ' + h;
+      })
+      .catch(function (e) {
+        var aviso = $('aviso');
+        aviso.hidden = false;
+        if (e.code === 'sin-base') {
+          aviso.innerHTML = '<strong>Falta un paso para que funcione:</strong> hay que conectar la base de datos del contador en Vercel. Hasta entonces no se guardan las visitas.';
+        } else {
+          aviso.innerHTML = '<strong>No se pudieron cargar las visitas.</strong> Revisá la conexión y tocá “Actualizar”.';
+        }
+        $('actualizado').textContent = datos ? 'Mostrando los últimos datos' : '';
+      })
+      .then(function () {
+        enCurso = false;
+        boton.classList.remove('girando');
+        boton.disabled = false;
+        $('panel').classList.remove('cargando');
+      });
+  }
+
+  /* ---------- Números ---------- */
+  function pintar() {
+    var d = datos;
+    $('v-hoy').textContent = fmt.format(d.hoy);
+    $('n-hoy').textContent = 'Ayer: ' + fmt.format(d.ayer);
+    $('v-semana').textContent = fmt.format(d.semana);
+    var mes = fecha(d.fecha, { month: 'long' }).toLowerCase();
+    $('t-mes').textContent = mes.charAt(0).toUpperCase() + mes.slice(1);
+    $('v-mes').textContent = fmt.format(d.mes);
+    $('n-mes').textContent = 'del 1 al ' + Number(d.fecha.slice(8)) + ' de ' + mes;
+    $('v-total').textContent = fmt.format(d.total);
+    $('n-total').textContent = d.inicio ? 'desde el ' + fecha(d.inicio, { day: 'numeric', month: 'long', year: 'numeric' }) : 'todavía sin visitas';
+
+    var filas = d.dias.slice().reverse().map(function (dia, i) {
+      var nombre = fecha(dia.fecha, { weekday: 'long', day: 'numeric', month: 'long' });
+      if (i === 0) nombre = 'Hoy (' + nombre + ')';
+      else if (i === 1) nombre = 'Ayer (' + nombre + ')';
+      else nombre = nombre.charAt(0).toUpperCase() + nombre.slice(1);
+      return '<tr' + (i === 0 ? ' class="hoy"' : '') + '><td>' + nombre + '</td><td class="num">' + fmt.format(dia.visitas) + '</td></tr>';
+    });
+    $('tabla').innerHTML = filas.join('');
+
+    $('grafica').setAttribute('aria-label', 'Gráfica de visitas por día de los últimos 30 días. Hoy: ' +
+      plural(d.hoy, 'visita', 'visitas') + '. Total de los 30 días: ' +
+      plural(d.dias.reduce(function (a, x) { return a + x.visitas; }, 0), 'visita', 'visitas') + '.');
+    dibujar();
+  }
+
+  /* ---------- Gráfica ---------- */
+  var NS = 'http://www.w3.org/2000/svg';
+  var geo = null;
+
+  function el(tag, attrs, padre) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (padre) padre.appendChild(n);
+    return n;
+  }
+
+  function escala(max) {
+    if (max <= 4) return { tope: 4, paso: 1 };
+    var bruto = max / 4;
+    var pot = Math.pow(10, Math.floor(Math.log10(bruto)));
+    var paso = [1, 2, 5, 10].map(function (m) { return m * pot; }).find(function (s) { return s >= bruto; });
+    return { tope: Math.ceil(max / paso) * paso, paso: paso };
+  }
+
+  function dibujar() {
+    if (!datos) return;
+    var caja = $('grafica');
+    var viejo = caja.querySelector('svg');
+    if (viejo) viejo.remove();
+
+    var dias = datos.dias;
+    var W = caja.clientWidth, H = caja.clientHeight;
+    var m = { arriba: 8, derecha: 4, abajo: 26, izquierda: 30 };
+    var ancho = W - m.izquierda - m.derecha, alto = H - m.arriba - m.abajo;
+    var max = Math.max.apply(null, dias.map(function (x) { return x.visitas; }));
+    var e = escala(max);
+    var ranura = ancho / dias.length;
+    var gap = 2;
+    var bw = Math.max(2, Math.min(28, ranura - gap));
+    var r = Math.min(4, bw / 2);
+    var y = function (v) { return m.arriba + alto - (v / e.tope) * alto; };
+
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, 'aria-hidden': 'true' });
+
+    // Líneas guía y números del eje
+    for (var v = 0; v <= e.tope; v += e.paso) {
+      var yy = Math.round(y(v)) + 0.5;
+      el('line', { x1: m.izquierda, x2: W - m.derecha, y1: yy, y2: yy, class: v === 0 ? 'base' : 'guia' }, svg);
+      var t = el('text', { x: m.izquierda - 8, y: yy + 4, 'text-anchor': 'end', class: 'eje num' }, svg);
+      t.textContent = fmt.format(v);
+    }
+
+    var foco = el('rect', { class: 'foco', y: m.arriba, height: alto, width: ranura, x: -999, rx: 4 }, svg);
+
+    var barras = dias.map(function (dia, i) {
+      var x = m.izquierda + i * ranura + (ranura - bw) / 2;
+      var base = y(0), tope = y(dia.visitas), h = base - tope;
+      if (dia.visitas <= 0 || h < 0.5) return null;
+      var rr = Math.min(r, h);
+      var d = 'M' + x + ',' + base +
+        'V' + (tope + rr) +
+        'Q' + x + ',' + tope + ' ' + (x + rr) + ',' + tope +
+        'H' + (x + bw - rr) +
+        'Q' + (x + bw) + ',' + tope + ' ' + (x + bw) + ',' + (tope + rr) +
+        'V' + base + 'Z';
+      return el('path', { d: d, class: 'barra' }, svg);
+    });
+
+    // Fechas abajo: cada 7 días, contando desde hoy hacia atrás
+    for (var i = dias.length - 1; i >= 0; i -= 7) {
+      var cx = m.izquierda + i * ranura + ranura / 2;
+      var anchor = i === dias.length - 1 ? 'end' : 'middle';
+      if (anchor === 'end') cx = Math.min(W - m.derecha, cx + ranura / 2);
+      var lab = el('text', { x: cx, y: H - 6, 'text-anchor': anchor, class: 'eje' }, svg);
+      lab.textContent = i === dias.length - 1 ? 'Hoy' : fecha(dias[i].fecha, { day: 'numeric', month: 'short' }).replace('.', '');
+    }
+
+    caja.insertBefore(svg, caja.firstChild);
+    geo = { m: m, ranura: ranura, W: W, barras: barras, foco: foco, y: y };
+    if (activo >= 0) mostrar(activo);
+  }
+
+  function mostrar(i) {
+    if (!geo || !datos) return;
+    activo = i;
+    var dia = datos.dias[i];
+    geo.barras.forEach(function (b, j) { if (b) b.classList.toggle('activa', j === i); });
+    geo.foco.setAttribute('x', geo.m.izquierda + i * geo.ranura);
+
+    var tip = $('tooltip');
+    var nombre = i === datos.dias.length - 1 ? 'Hoy' : fecha(dia.fecha, { weekday: 'short', day: 'numeric', month: 'short' }).replace(/\./g, '');
+    tip.innerHTML = '<strong class="num">' + plural(dia.visitas, 'visita', 'visitas') + '</strong><span>' + nombre + '</span>';
+    tip.classList.add('visible');
+    var cx = geo.m.izquierda + i * geo.ranura + geo.ranura / 2;
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var left = Math.max(0, Math.min(geo.W - tw, cx - tw / 2));
+    var top = Math.max(-th - 4, geo.y(dia.visitas) - th - 10);
+    tip.style.transform = 'translate(' + left + 'px,' + top + 'px)';
+  }
+
+  function ocultar() {
+    activo = -1;
+    $('tooltip').classList.remove('visible');
+    if (!geo) return;
+    geo.foco.setAttribute('x', -999);
+    geo.barras.forEach(function (b) { if (b) b.classList.remove('activa'); });
+  }
+
+  function indice(ev) {
+    var rect = $('grafica').getBoundingClientRect();
+    var i = Math.floor((ev.clientX - rect.left - geo.m.izquierda) / geo.ranura);
+    return Math.max(0, Math.min(datos.dias.length - 1, i));
+  }
+
+  var grafica = $('grafica');
+  grafica.addEventListener('pointermove', function (ev) { if (geo) mostrar(indice(ev)); });
+  grafica.addEventListener('pointerdown', function (ev) { if (geo) mostrar(indice(ev)); });
+  grafica.addEventListener('pointerleave', function (ev) { if (ev.pointerType === 'mouse') ocultar(); });
+  document.addEventListener('pointerdown', function (ev) { if (!grafica.contains(ev.target)) ocultar(); });
+
+  if ('ResizeObserver' in window) {
+    var ultimoAncho = 0;
+    new ResizeObserver(function () {
+      if (grafica.clientWidth !== ultimoAncho) { ultimoAncho = grafica.clientWidth; dibujar(); }
+    }).observe(grafica);
+  } else {
+    window.addEventListener('resize', dibujar);
+  }
+
+  /* ---------- No contar este dispositivo ---------- */
+  var check = $('no-contar');
+  try { check.checked = localStorage.getItem('amter_no_contar') === '1'; } catch (e) { check.disabled = true; }
+  function textoSwitch() {
+    $('no-contar-texto').textContent = check.checked
+      ? 'Listo: las visitas desde este dispositivo no se suman. Hay que hacerlo en cada celular o compu.'
+      : 'Activalo en tu celular y en la compu del hotel para que tus propias entradas no se sumen. Hay que hacerlo en cada dispositivo.';
+  }
+  textoSwitch();
+  check.addEventListener('change', function () {
+    try {
+      if (check.checked) localStorage.setItem('amter_no_contar', '1');
+      else localStorage.removeItem('amter_no_contar');
+    } catch (e) {}
+    textoSwitch();
+  });
+
+  /* ---------- Arranque ---------- */
+  $('recargar').addEventListener('click', cargar);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) cargar(); });
+  setInterval(function () { if (!document.hidden) cargar(); }, 60000);
+  cargar();
+})();
+</script>
+</body>
+</html>
